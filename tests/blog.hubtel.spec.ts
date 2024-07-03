@@ -15,12 +15,15 @@ test.beforeEach(async ({ page }) => {
     'Inside Hubtel'
 ]
 
+//Check if we are on the right page.
 test('has title', async({page}) =>{
 
     await expect(page).toHaveTitle('The Official Hubtel Blog')
 
 })
 
+
+// Make sure the search funtionality is working properly
 test('check is search works', async({page})=>{
 
     await page.locator('#navbarDropdownMenuLink').hover()
@@ -33,7 +36,7 @@ test('check is search works', async({page})=>{
 
 
 
-
+// Make sure the link to each catogory is working and also check if each category have at least one article.
 test('check if article has items', async({page}) =>{
 
     const linkstoblog = page.getByRole('link',{name:'view all'})
@@ -55,7 +58,7 @@ test('check if article has items', async({page}) =>{
 // Checking if paystore and appstore buttons are working
 test.describe('checking buttons', ()=>{
 
- 
+    // Make sure appgallery button is working
     test('check app on store btn', async({page})=>{
   
         const btn1 = page.locator('.d-xl-block').nth(1)
@@ -68,7 +71,7 @@ test.describe('checking buttons', ()=>{
         await expect(page).toHaveURL('https://appgallery.huawei.com/app/C101763075')
     })
 
-
+    // Make sure appstore button is working
     test('check app on app store', async({page})=>{
 
         const btn1 = page.locator('.d-xl-block').nth(0)
@@ -81,7 +84,7 @@ test.describe('checking buttons', ()=>{
 })
 
 
-
+// Checking if the link to the blog page is working
 test('click button is working', async({page}) =>{
 
    const blogBtn =  page.getByRole('link', {name:'Blog'})
@@ -92,6 +95,8 @@ test('click button is working', async({page}) =>{
 
 })
 
+
+//Checking if the link to the news category is working
 test('check to see if nav links work', async({page})=>{
 
     await page.getByRole('link',{name:'News'}).click()
@@ -118,6 +123,7 @@ test('footer button click working', async({page}) =>{
 })
 
 
+// I have run the code and everything is working as expected both in the terminal and the browser.
 test.afterAll('All test done', async () => {
     console.log('Done with tests');
   });
