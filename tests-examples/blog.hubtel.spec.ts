@@ -55,6 +55,16 @@ test('check if article has items', async({page}) =>{
     }
 })
 
+// const image = page.locator('.mb-3 > .w-100')
+//     const title = page.getByRole('heading', { name: 'Hubtel Announces Completion' })
+//     const date = page.getByRole('heading', { name: 'March 28, 2024 | 6 minutes' })
+//     const readingDuration = page.getByText('6 minutes read')
+
+//     await expect(image).toBeVisible()
+//     await expect(title).toBeVisible()
+//     await expect(date).toBeVisible()
+//     await expect(readingDuration).toBeVisible()
+
 // Checking if paystore and appstore buttons are working
 test.describe('checking buttons', ()=>{
 

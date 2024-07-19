@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import path from 'path';
 
 /**
  * Read environment variables from file.
@@ -6,7 +7,7 @@ import { defineConfig, devices } from '@playwright/test';
  */
 // import dotenv from 'dotenv';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
-
+export const STORAGE_STATE = path.join(__dirname, 'playwright/.auth/user.json')
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -26,7 +27,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://127.0.0.1:3000',
+    // baseURL: 'https://en.wikipedia.org/wiki/Main_Page',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -36,6 +37,19 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+
+    // {
+    //   name:'setup',
+    //   testMatch:'**/*.setup.ts'
+    // },
+    // {
+    //   name:'e2e tests logged in',
+    //   testMatch:'**/*loggedin.spec.ts',
+    //   dependencies:['setup'],
+    //   use:{
+    //     storageState:STORAGE_STATE
+    //   }
+    // },
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
@@ -59,7 +73,7 @@ export default defineConfig({
     // {
     //   name: 'Mobile Safari',
     //   use: { ...devices['iPhone 12'] },
-    // },
+    // },s
 
     /* Test against branded browsers. */
     // {

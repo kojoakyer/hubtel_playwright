@@ -1,81 +1,110 @@
 import { test, expect } from '@playwright/test';
 
-
 test.beforeEach(async ({ page }) => {
+    await page.goto('https://blog.hubtel.com/');
+  });
 
-    await page.goto('https://hubtel.com/');
+    // Test Data
+    const navLinks = [
+        'News',
+        'Press Releases',
+        'Product Updates',
+        'Guides',
+        'Inside Hubtel'
+      ]
+    
+      const data = [
+        'News',
+        'Press Releases',
+        'Product Updates',
+        'Guides',
+        'Inside Hubtel'
+      ]
 
+      test.describe('Navigation links', () =>{
+
+        test('links ', async({page})=>{
+    
+        for(let i =0 ; i < navLinks.length; i++){
+                await page.getByRole('link', { name: navLinks[i] }).click();
+               
+                const heading = page.getByRole('heading', { name: data[i] })
+                 expect(heading).toBeVisible()
+                await page.goBack()
+            }
+    
+        })
+    
+    
+        test('customer', async({page})=>{
+            await page.getByRole('link', { name: 'Customer Stories' }).first().click();
+            const customerHeading =  page.getByRole('heading', { name: 'Customer Stories' })
+            await expect(customerHeading).toBeVisible()
+        })
+    
+      })
+
+        // Check if the page has at least one main news article
+test('check if article has items', async({page}) =>{
+    
+    const newsHeading =  page.getByRole('heading', { name: 'News' })
+
+    await expect(newsHeading).toBeVisible()
+
+    if(await newsHeading.count() > 1){
+                console.log('has more than 1 element')
+            }
+})
+
+// The news articles under the category Press Releases, each has an image, title, date and the reading duration.
+test('check if article has details', async({page}) => {
+
+    await page.getByRole('link', { name: 'Press Releases' }).click();
+
+    await page.getByRole('link', { name: 'Hubtel Announces Completion' }).click();
+
+   const image = page.locator('.mb-3 > .w-100')
+    const title = page.getByRole('heading', { name: 'Hubtel Announces Completion' })
+     const date = page.getByRole('heading', { name: 'March 28, 2024 | 6 minutes' })
+    const readingDuration = page.getByText('6 minutes read')
+
+    await expect(image).toBeVisible()     
+    await expect(title).toBeVisible()
+    await expect(date).toBeVisible()
+    await expect(readingDuration).toBeVisible()
+
+})
+
+
+// Checking if links to download the Hubtel app, verify that the links work
+test.describe('checking buttons', ()=>{
+
+    // Make sure appgallery button is working
+    test('check app on store btn', async({page})=>{
+  
+        const btn1 = page.locator('.d-xl-block').nth(1)
+  
+        if(await btn1.isVisible()){
+            await btn1.click()
+        }
+
+        // await expect(page).toHaveTitle('AppGallery')
+        await expect(page).toHaveURL('https://appgallery.huawei.com/app/C101763075')
+    })
+
+    // Make sure appstore button is working
+    test('check app on app store', async({page})=>{
+
+        const btn1 = page.locator('.d-xl-block').nth(0)
+  
+        if(await btn1.isVisible()){
+            await btn1.click()
+        }
+        await expect(page).toHaveTitle('Hubtel on the App Store')
+    })
+})
+
+// All test passed
+test.afterAll('All test done', async () => {
+    console.log('Done with tests');
 });
-
-
-// Test Data
-const navbarData = [
-    'Make Orders',
-    'Take Payments',
-    'Grow Revenues',
-    'Send SMS',
-    'Save With Us'
-]
-
-// Make sure page has a title
-test('has title', async({page}) =>{
-
-    await expect(page).toHaveTitle('Hubtel - Find and pay for everyday essentials')
-
-})
-
-//Check if navabr items are working
-test.describe('navabar elements', ()=>{
-
-    test('navbar links', async({page}) =>{
-
-        const listsOfElements =  page.getByRole('listitem').filter({has: page.getByRole('link',{name:'Make Orders'})})
-
-        await expect(listsOfElements).toHaveCount(1)
-
-        await expect(listsOfElements).toHaveText(navbarData[0])
-    })
-})
-
-// Make sure search location is working
-test('search location', async({page}) =>{
-    const searchfield =  page.getByPlaceholder('Set your location to continue')
-
-    await searchfield.fill('Accra, Ghana')
-
-    const selectOptions =  page.locator('.text-truncate').nth(1)
-
-    if( await selectOptions.isVisible()){
-        if(await selectOptions.isEnabled())  await selectOptions.click();
-    }
-
-})
-
-// Make sure login functionality is working
-test.describe('login and signup', () =>{
-
-    test('login', async({page})=>{
-        
-       const loginBtn = page.getByText('Login').nth(0)
-
-       if(await loginBtn.isVisible()){
-            await  loginBtn.click()
-       }
-
-       await expect(page).toHaveTitle('Hubtel - Login')
-
-       await page.getByPlaceholder('Enter a phone number').fill('0541134444')
-
-       const submitBtn = page.locator('id=enter-phone-btn')
-
-       if(await submitBtn.isEnabled()){
-            await submitBtn.click()
-       }
-
-       if(await page.goForward()){
-        await expect(page.getByText('Approve login request')).toBeVisible()
-       }
-
-    })
-
-})
